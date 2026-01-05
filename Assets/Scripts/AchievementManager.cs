@@ -17,6 +17,16 @@ public sealed class AchievementsManager : MonoBehaviour
     private const string SaveKey = "ACH_UNLOCKED_V1";
     private const char Sep = '|';
 
+    [SerializeField] private AchievementsCatalog catalog;
+    public AchievementsCatalog Catalog => catalog;
+
+    public bool TryGetDefinition(string id, out AchievementDefinition def)
+    {
+        def = null;
+        if (catalog == null) return false;
+        return catalog.TryGet(id, out def);
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

@@ -4,13 +4,10 @@ using UnityEngine.UI;
 
 public sealed class AchievementCard : MonoBehaviour
 {
-    [Header("Achievement Data")]
+    [Header("Runtime")]
     [SerializeField] private string achievementId;
-    [SerializeField] private Sprite icon;
-    [SerializeField] private string unlockedName;
-    [TextArea] [SerializeField] private string unlockedDescription;
 
-    [Header("UI References")]
+    [Header("Refs")]
     [SerializeField] private Image iconImage;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descText;
@@ -19,11 +16,12 @@ public sealed class AchievementCard : MonoBehaviour
     [SerializeField] private string lockedName = "???";
     [SerializeField] private Color lockedIconTint = Color.gray;
 
-    public Sprite PopupIcon => icon;
-    public string PopupTitle => unlockedName;
-    public string PopupDesc => unlockedDescription;
-
     public string Id => achievementId;
+
+    public void SetId(string id)
+    {
+        achievementId = id;
+    }
 
     private void OnEnable()
     {
@@ -34,11 +32,20 @@ public sealed class AchievementCard : MonoBehaviour
     {
         var mgr = AchievementsManager.Instance;
         bool unlocked = mgr != null && mgr.IsUnlocked(achievementId);
-        Apply(unlocked);
+
+        AchievementDefinition def = null;
+        if (mgr != null)
+            mgr.TryGetDefinition(achievementId, out def);
+
+        Apply(unlocked, def);
     }
 
-    public void Apply(bool unlocked)
+    private void Apply(bool unlocked, AchievementDefinition def)
     {
+        var icon = def != null ? def.icon : null;
+        var title = def != null && !string.IsNullOrWhiteSpace(def.title) ? def.title : achievementId;
+        var desc = def != null ? def.description : "";
+
         if (iconImage != null)
         {
             iconImage.sprite = icon;
@@ -46,12 +53,31 @@ public sealed class AchievementCard : MonoBehaviour
         }
 
         if (nameText != null)
-            nameText.text = unlocked ? unlockedName : lockedName;
+            nameText.text = unlocked ? title : lockedName;
 
         if (descText != null)
         {
-            descText.text = unlocked ? unlockedDescription : "";
-            descText.gameObject.SetActive(unlocked);
+            descText.text = unlocked ? desc : "";
+            descText.gameObject.SetActive(unlocked && !string.IsNullOrEmpty(desc));
+        }
+    }
+
+
+    private void ApplyFallback(bool unlocked)
+    {
+        if (iconImage != null)
+        {
+            iconImage.sprite = null;
+            iconImage.color = unlocked ? Color.white : lockedIconTint;
+        }
+
+        if (nameText != null)
+            nameText.text = unlocked ? achievementId : lockedName;
+
+        if (descText != null)
+        {
+            descText.text = "";
+            descText.gameObject.SetActive(false);
         }
     }
 }

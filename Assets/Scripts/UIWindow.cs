@@ -122,9 +122,13 @@ public sealed class UIWindow : MonoBehaviour
         if (manager != null) manager.BringToFront(this);
     }
 
+    public bool IsFocused { get; private set; }
+
     public void SetFocused(bool focused)
     {
         if (!IsOpen) return;
+
+        IsFocused = focused;
         canvasGroup.alpha = focused ? 1f : unfocusedAlpha;
     }
 
