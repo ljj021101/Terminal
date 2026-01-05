@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ using UnityEngine;
 public sealed class AchievementsManagerEditor : Editor
 {
     private Vector2 scroll;
-    private readonly List<AchievementCard> cards = new List<AchievementCard>();
+    private readonly List<string> ids = new List<string>();
 
     public override void OnInspectorGUI()
     {
@@ -21,7 +20,7 @@ public sealed class AchievementsManagerEditor : Editor
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Rescan", GUILayout.Width(90)))
-                    RescanCards();
+                    RescanFromCatalog(mgr);
 
                 if (GUILayout.Button("Clear All", GUILayout.Width(90)))
                 {
@@ -39,8 +38,8 @@ public sealed class AchievementsManagerEditor : Editor
                 }
             }
 
-            if (cards.Count == 0)
-                RescanCards();
+            if (ids.Count == 0)
+                RescanFromCatalog(mgr);
 
             // Snapshot unlocked ids for display and toggle behavior
             var unlockedSet = new HashSet<string>();
@@ -53,12 +52,9 @@ public sealed class AchievementsManagerEditor : Editor
 
             scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.MinHeight(180));
 
-            for (int i = 0; i < cards.Count; i++)
+            for (int i = 0; i < ids.Count; i++)
             {
-                var c = cards[i];
-                if (c == null) continue;
-
-                var id = c.Id ?? "";
+                var id = ids[i];
                 if (string.IsNullOrWhiteSpace(id)) continue;
 
                 using (new EditorGUILayout.HorizontalScope("box"))
@@ -84,10 +80,14 @@ public sealed class AchievementsManagerEditor : Editor
 
                     GUI.enabled = true;
 
-                    if (GUILayout.Button("Ping", GUILayout.Width(60)))
+                    if (GUILayout.Button("Ping Catalog", GUILayout.Width(90)))
                     {
-                        EditorGUIUtility.PingObject(c.gameObject);
-                        Selection.activeObject = c.gameObject;
+                        var cat = mgr.Catalog;
+                        if (cat != null)
+                        {
+                            EditorGUIUtility.PingObject(cat);
+                            Selection.activeObject = cat;
+                        }
                     }
                 }
             }
@@ -96,32 +96,18 @@ public sealed class AchievementsManagerEditor : Editor
         }
     }
 
-    private void RescanCards()
+    private void RescanFromCatalog(AchievementsManager mgr)
     {
-        cards.Clear();
+        ids.Clear();
 
-        var found = Object.FindObjectsByType<AchievementCard>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        );
-
-        if (found == null) return;
-
-        // De-dup by id, then sort
-        var unique = new Dictionary<string, AchievementCard>();
-        for (int i = 0; i < found.Length; i++)
+        var catalog = mgr != null ? mgr.Catalog : null;
+        if (catalog == null)
         {
-            var c = found[i];
-            if (c == null) continue;
-
-            var id = c.Id ?? "";
-            if (string.IsNullOrWhiteSpace(id)) continue;
-
-            if (!unique.ContainsKey(id))
-                unique.Add(id, c);
+            EditorGUILayout.HelpBox("Catalog is null, cannot list achievements from ScriptableObject", MessageType.Warning);
+            return;
         }
 
-        cards.AddRange(unique.OrderBy(kv => kv.Key).Select(kv => kv.Value));
+        ids.AddRange(catalog.GetAllIdsSorted());
     }
 
     private static void RefreshAllPanels()

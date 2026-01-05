@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public sealed class AchievementCard : MonoBehaviour
+public sealed class AchievementCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     [Header("Runtime")]
     [SerializeField] private string achievementId;
@@ -16,7 +17,13 @@ public sealed class AchievementCard : MonoBehaviour
     [SerializeField] private string lockedName = "???";
     [SerializeField] private Color lockedIconTint = Color.gray;
 
+    [Header("Hover Tip")]
+    [SerializeField] private bool showHoverOnlyWhenLocked = true;
+    [SerializeField] private bool followMouse = true;
+
     public string Id => achievementId;
+
+    private bool hovering;
 
     public void SetId(string id)
     {
@@ -26,6 +33,13 @@ public sealed class AchievementCard : MonoBehaviour
     private void OnEnable()
     {
         Refresh();
+    }
+
+    private void OnDisable()
+    {
+        hovering = false;
+        if (AchievementHoverTooltip.Instance != null)
+            AchievementHoverTooltip.Instance.Hide();
     }
 
     public void Refresh()
@@ -38,6 +52,9 @@ public sealed class AchievementCard : MonoBehaviour
             mgr.TryGetDefinition(achievementId, out def);
 
         Apply(unlocked, def);
+
+        if (hovering)
+            TryShowOrUpdateTip(unlocked, def);
     }
 
     private void Apply(bool unlocked, AchievementDefinition def)
@@ -62,7 +79,6 @@ public sealed class AchievementCard : MonoBehaviour
         }
     }
 
-
     private void ApplyFallback(bool unlocked)
     {
         if (iconImage != null)
@@ -79,5 +95,64 @@ public sealed class AchievementCard : MonoBehaviour
             descText.text = "";
             descText.gameObject.SetActive(false);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        hovering = true;
+
+        var mgr = AchievementsManager.Instance;
+        bool unlocked = mgr != null && mgr.IsUnlocked(achievementId);
+
+        AchievementDefinition def = null;
+        if (mgr != null)
+            mgr.TryGetDefinition(achievementId, out def);
+
+        TryShowOrUpdateTip(unlocked, def, eventData.position);
+    }
+
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        if (!hovering) return;
+        if (!followMouse) return;
+
+        var tip = AchievementHoverTooltip.Instance;
+        if (tip == null) return;
+
+        tip.SetPosition(eventData.position);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        hovering = false;
+
+        var tip = AchievementHoverTooltip.Instance;
+        if (tip != null)
+            tip.Hide();
+    }
+
+    private void TryShowOrUpdateTip(bool unlocked, AchievementDefinition def, Vector2? screenPosOverride = null)
+    {
+        var tip = AchievementHoverTooltip.Instance;
+        if (tip == null) return;
+
+        if (showHoverOnlyWhenLocked && unlocked)
+        {
+            tip.Hide();
+            return;
+        }
+
+        string msg = "";
+        if (!unlocked && def != null)
+            msg = def.lockedHoverHint;
+
+        if (string.IsNullOrWhiteSpace(msg))
+        {
+            tip.Hide();
+            return;
+        }
+
+        Vector2 screenPos = screenPosOverride ?? (Vector2)Input.mousePosition;
+        tip.Show(msg, screenPos);
     }
 }

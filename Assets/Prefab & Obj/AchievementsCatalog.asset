@@ -23,3 +23,8 @@ MonoBehaviour:
     title: "\u661F\u63A2"
     description: "\u70B9\u51FB\u80CC\u666F\u4E2D\u95EA\u70C1\u7684\u661F\u661F"
     lockedHoverHint: "\u63A2\u7D22\u795E\u79D8\u5B87\u5B99"
+  - id: ach.kmyy
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u82E6\u547D\u9E33\u9E2F"
+    description: "\u627E\u5230\u90A3\u4E00\u5BF9\u82E6\u547D\u9E33\u9E2F\u7684\u795E\u79D8\u4EE3\u7801"
+    lockedHoverHint: "\u63A2\u7D22\u795E\u79D8\u5B87\u5B99"

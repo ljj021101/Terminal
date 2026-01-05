@@ -12,18 +12,13 @@ public sealed class AchievementHoverTooltip : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
 
     [Header("Layout")]
-    [Tooltip("Max width for the text area (not including padding).")]
-    [SerializeField] private float maxWidth = 360f;
-
-    [Tooltip("Total padding, x = left+right, y = top+bottom.")]
-    [SerializeField] private Vector2 padding = new Vector2(24f, 16f);
-
-    [Tooltip("Tooltip offset relative to the mouse position in canvas local space.")]
+    [SerializeField] private float maxWidth = 420f;
+    [SerializeField] private Vector2 padding = new Vector2(24f, 16f); // x=左右总和, y=上下总和
     [SerializeField] private Vector2 screenOffset = new Vector2(-12f, 12f);
 
     [Header("Clamp")]
     [SerializeField] private bool clampToCanvas = true;
-    [SerializeField] private Vector2 clampPadding = new Vector2(8f, 8f);
+    [SerializeField] private Vector2 clampPadding = new Vector2(0f, 0f);
 
     private Canvas rootCanvas;
     private Camera uiCamera;
@@ -53,7 +48,11 @@ public sealed class AchievementHoverTooltip : MonoBehaviour
     {
         if (panelRect == null || canvasRect == null || tmp == null) return;
 
-        // 先激活，避免 ForceMeshUpdate / preferred size 为 0
+        tmp.enableWordWrapping = true;
+        tmp.text = message ?? "";
+
+        UpdateSizeToText();
+
         panelRect.gameObject.SetActive(true);
         visible = true;
 
@@ -64,10 +63,6 @@ public sealed class AchievementHoverTooltip : MonoBehaviour
             canvasGroup.blocksRaycasts = false;
         }
 
-        tmp.enableWordWrapping = true;
-        tmp.text = message ?? "";
-
-        UpdateSizeToText();
         SetPosition(screenPos);
     }
 
@@ -108,36 +103,19 @@ public sealed class AchievementHoverTooltip : MonoBehaviour
     {
         if (panelRect == null || tmp == null) return;
 
-        float textMax = Mathf.Max(1f, maxWidth);
-
-        // 关键：限制 TMP 文本容器宽度，让“实际渲染换行”和“GetPreferredValues 计算”一致
-        tmp.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, textMax);
-
         tmp.ForceMeshUpdate();
 
-        // 在 maxWidth 限制下计算内容理想尺寸
-        Vector2 pref = tmp.GetPreferredValues(tmp.text, textMax, 0f);
+        var pref = tmp.GetPreferredValues(tmp.text, maxWidth, 0f);
+        float w = Mathf.Min(pref.x, maxWidth) + padding.x;
+        float h = pref.y + padding.y;
 
-        float contentW = Mathf.Min(pref.x, textMax);
-        float panelW = contentW + padding.x;
-        float panelH = pref.y + padding.y;
-
-        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, panelW);
-        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, panelH);
-
-        // 再把文本容器宽度设置为 panel 内部可用宽度
-        float innerW = Mathf.Max(1f, panelW - padding.x);
-        float innerH = Mathf.Max(1f, panelH - padding.y);
-
-        tmp.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, innerW);
-        tmp.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, innerH);
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, w);
+        panelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
     }
 
     private void ClampInsideCanvas()
     {
         var canvas = canvasRect.rect;
-
-        // 用 panel 的 pivot 做通用夹紧
         var tip = panelRect.rect;
         var pivot = panelRect.pivot;
 

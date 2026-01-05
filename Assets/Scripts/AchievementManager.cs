@@ -17,8 +17,12 @@ public sealed class AchievementsManager : MonoBehaviour
     private const string SaveKey = "ACH_UNLOCKED_V1";
     private const char Sep = '|';
 
+    [Header("Data Tables")]
     [SerializeField] private AchievementsCatalog catalog;
+    [SerializeField] private AchievementSequenceTable sequenceTable;
+
     public AchievementsCatalog Catalog => catalog;
+    public AchievementSequenceTable SequenceTable => sequenceTable;
 
     public bool TryGetDefinition(string id, out AchievementDefinition def)
     {

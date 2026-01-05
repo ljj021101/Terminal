@@ -38,7 +38,7 @@ public sealed class AchievementsCatalog : ScriptableObject
 
     public bool TryGet(string id, out AchievementDefinition entry)
     {
-        entry = null; // ✅ 这行修 CS0177
+        entry = null;
 
         if (string.IsNullOrWhiteSpace(id)) return false;
 
