@@ -21,11 +21,6 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
     [SerializeField] private Button backspaceButton;
     [SerializeField] private Button submitButton;
 
-    [Header("Feedback Spawn")]
-    [SerializeField] private RectTransform canvasRect;
-    [SerializeField] private RectTransform feedbackSpawnPoint;
-    [SerializeField] private SequenceFeedbackItem feedbackPrefab;
-
     private readonly List<string> tokensCanonical = new List<string>(10);
     private readonly List<string> tokensDisplay = new List<string>(10);
 
@@ -154,23 +149,34 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
 
     public void Submit()
     {
-        if (tokensCanonical.Count == 0) return;
+        if (tokensCanonical.Count == 0)
+        {
+            var mgr0 = AchievementsManager.Instance;
+            if (mgr0 != null)
+                mgr0.Unlock("ach.kongxulie");
+
+            return;
+        }
 
         string key = string.Join(" ", tokensCanonical);
 
         if (sequenceTable == null)
         {
             Debug.LogWarning($"[Redeem] sequenceTable is NULL, input = {key}");
-            SpawnFeedback(string.Join(" ", tokensDisplay), false);
             ResetInput();
             return;
         }
 
         bool ok = sequenceTable.TryResolve(tokensCanonical, out string achievementId);
-
         Debug.Log($"[Redeem] input = {key}, ok = {ok}, id = {achievementId}");
 
-        bool unlockedNow = false;
+        if (!ok)
+        {
+            FindObjectOfType<DesktopDiagnosticNote>(true)?.EnsureOnDesktop();
+            ResetInput();
+            return;
+        }
+
         if (ok && !string.IsNullOrEmpty(achievementId))
         {
             var mgr = AchievementsManager.Instance;
@@ -180,28 +186,12 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
             }
             else
             {
-                unlockedNow = mgr.Unlock(achievementId);
+                bool unlockedNow = mgr.Unlock(achievementId);
                 Debug.Log($"[Redeem] Unlock() returned {unlockedNow}, IsUnlocked = {mgr.IsUnlocked(achievementId)}");
             }
         }
 
-        // 这里我建议：只要匹配到了并且已经解锁过，也给成功反馈
-        bool successFeedback = ok && AchievementsManager.Instance != null && AchievementsManager.Instance.IsUnlocked(achievementId);
-
-        SpawnFeedback(string.Join(" ", tokensDisplay), successFeedback);
         ResetInput();
-    }
-
-    private void SpawnFeedback(string msg, bool success)
-    {
-        if (feedbackPrefab == null) return;
-        if (feedbackSpawnPoint == null) return;
-
-        var go = Instantiate(feedbackPrefab, feedbackSpawnPoint.parent);
-        var item = go.GetComponent<SequenceFeedbackItem>();
-
-        var start = feedbackSpawnPoint.anchoredPosition;
-        item.Play(msg, start, success, canvasRect);
     }
 
     private void RefreshCells()

@@ -17,3 +17,18 @@ MonoBehaviour:
     sequences:
     - 3 5 0 2 3 4
     - 3 5 0 2 3 5
+  - achievementId: ach.hdl
+    sequences:
+    - 'UP UP DOWN DOWN LEFT RIGHT LEFT RIGHT B A '
+  - achievementId: ach.readthelog
+    sequences:
+    - R E A D T H E L O G
+  - achievementId: ach.readthelog+
+    sequences:
+    - 8 3 6 5 9 2 1
+  - achievementId: ach.helloworld
+    sequences:
+    - H E L L O W O R L D
+  - achievementId: ach.114514
+    sequences:
+    - 1 1 4 5 1 4

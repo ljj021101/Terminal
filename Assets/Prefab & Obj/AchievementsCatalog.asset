@@ -15,9 +15,9 @@ MonoBehaviour:
   entries:
   - id: ach.first_open_achievements
     icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
-    title: "\u4F60\u597D\uFF0C\u4E16\u754C"
+    title: "\u521D\u5B66\u8005"
     description: "\u7B2C\u4E00\u6B21\u6253\u5F00\u6210\u5C31\u7CFB\u7EDF"
-    lockedHoverHint: 
+    lockedHoverHint: "\u4E3A\u4EC0\u4E48\u4F60\u4F1A\u770B\u5230\u8FD9\u6BB5\u6587\u5B57\uFF0C\u8FD9\u4E0D\u79D1\u5B66"
   - id: ach.click_star
     icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
     title: "\u661F\u63A2"
@@ -27,4 +27,39 @@ MonoBehaviour:
     icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
     title: "\u82E6\u547D\u9E33\u9E2F"
     description: "\u627E\u5230\u90A3\u4E00\u5BF9\u82E6\u547D\u9E33\u9E2F\u7684\u795E\u79D8\u4EE3\u7801"
-    lockedHoverHint: "\u63A2\u7D22\u795E\u79D8\u5B87\u5B99"
+    lockedHoverHint: "\u4E24\u53EA\u4EE5\u60B2\u5267\u6536\u573A\u7684\u534E\u4E1C\u6C34\u9E1F\uFF0C\u8FF7\u5931\u5728\u6F6E\u6C50\u4E4B\u95F4"
+  - id: ach.hdl
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "30\u6761\u547D\uFF01"
+    description: "\u4F60\u73B0\u5728\u6240\u5411\u62AB\u9761"
+    lockedHoverHint: "\u4E00\u573A\u53E4\u8001\u7684\u4EEA\u5F0F\uFF0C\u636E\u8BF4\u80FD\u6362\u6765\u4E09\u5341\u6B21\u91CD\u751F"
+  - id: ach.kongxulie
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u865A\u65E0"
+    description: "\u63D0\u4EA4\u4E00\u4E2A\u7A7A\u5E8F\u5217"
+    lockedHoverHint: "0\u5B57\u8282\u7684\u8BDA\u610F"
+  - id: ach.readthelog
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u7A0B\u5E8F\u5458"
+    description: "\u4F60\u9605\u8BFB\u4E86\u62A5\u9519\u65E5\u5FD7"
+    lockedHoverHint: "\u9519\u8BEF\u8F93\u5165\u7684\u65E5\u5FD7\u5C06\u540C\u6B65\u81F3\u7CFB\u7EDF\u684C\u9762"
+  - id: ach.fangzhu
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u653E\u9010"
+    description: "\u628A\u4E00\u4E2A\u7A97\u53E3\u5B8C\u6574\u62D6\u51FA\u6E38\u620F\u89C6\u91CE\u3002\u91CD\u542F\u540E\u5B83\u6216\u8BB8\u4F1A\u56DE\u6765\u3002"
+    lockedHoverHint: "\u518D\u89C1\u4E86\uFF0C\u5C0F\u7A97\u53E3\uFF01"
+  - id: ach.readthelog+
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u8FDB\u9636\u7A0B\u5E8F\u5458"
+    description: "\u4F60\u5B8C\u5168\u7834\u89E3\u4E86\u9519\u8BEF\u62A5\u544A"
+    lockedHoverHint: "\u4ED4\u7EC6\u770B\u770B\u9519\u8BEF\u62A5\u544A\uFF0C\u4F60\u53EF\u80FD\u5F97\u5199\u70B9\u4EC0\u4E48"
+  - id: ach.helloworld
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u7801\u519C\u9884\u5907\u5F79"
+    description: Hello, World
+    lockedHoverHint: "\u7F16\u7A0B\u7B2C\u4E00\u8BFE"
+  - id: ach.114514
+    icon: {fileID: -1618460760585819409, guid: da91c2cddd240c240b621128f11faf65, type: 3}
+    title: "\u3044\u3044\u3088\u3001\u3053\u3044\u3088"
+    description: "\u653E\u9A6C\u8FC7\u6765\u5427\uFF01"
+    lockedHoverHint: "\u884C\u554A\uFF0C\u6765\u554A\uFF08\u8B66\u89C9\uFF09"

@@ -97,6 +97,8 @@ MonoBehaviour:
   descText: {fileID: 5143519516322791358}
   lockedName: ???
   lockedIconTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  showHoverOnlyWhenLocked: 1
+  followMouse: 1
 --- !u!1 &6828281701713760395
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,8 +133,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.9385, y: -17.796}
-  m_SizeDelta: {x: 190.877, y: 65.6238}
+  m_AnchoredPosition: {x: 42.073, y: -16.4}
+  m_SizeDelta: {x: 185.1475, y: 65.6238}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2899076478915542454
 CanvasRenderer:
@@ -190,8 +192,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -344,7 +346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.939, y: 15.204}
+  m_AnchoredPosition: {x: 44.939, y: 17.1}
   m_SizeDelta: {x: 190.88, y: 50.592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &205004044075260727
