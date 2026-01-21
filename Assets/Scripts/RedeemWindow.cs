@@ -21,8 +21,16 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
     [SerializeField] private Button backspaceButton;
     [SerializeField] private Button submitButton;
 
+    [Header("Highlight Letters")]
+    [SerializeField] private bool highlightLettersEnabled = true;
+    [SerializeField] private string highlightLetters = "PIANO";
+    [SerializeField] private Color highlightColor = new Color32(10, 0, 0, 255);
+
     private readonly List<string> tokensCanonical = new List<string>(10);
     private readonly List<string> tokensDisplay = new List<string>(10);
+
+    // 记录每个格子原始颜色，避免你 UI 主题色被覆盖掉后无法恢复
+    private readonly List<Color> cellBaseColors = new List<Color>(10);
 
     private void Awake()
     {
@@ -30,6 +38,7 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
             ownerWindow = GetComponentInParent<UIWindow>(true);
 
         AutoBindCellsIfNeeded();
+        CacheCellBaseColors();
 
         if (resetButton != null) resetButton.onClick.AddListener(ResetInput);
         if (backspaceButton != null) backspaceButton.onClick.AddListener(Backspace);
@@ -50,6 +59,19 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
         {
             var t = cellsRoot.GetChild(i).GetComponentInChildren<TMP_Text>(true);
             if (t != null) cellTexts.Add(t);
+        }
+    }
+
+    private void CacheCellBaseColors()
+    {
+        cellBaseColors.Clear();
+
+        if (cellTexts == null) return;
+
+        for (int i = 0; i < cellTexts.Count; i++)
+        {
+            var t = cellTexts[i];
+            cellBaseColors.Add(t != null ? t.color : Color.white);
         }
     }
 
@@ -98,12 +120,15 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
 
             if (tokensCanonical.Count >= maxTokens) continue;
 
+            // 空格也给个可见符号
+            if (ch == ' ')
+            {
+                PushToken("SPACE", "␣");
+                continue;
+            }
+
             // 统一转大写更像“密码”
             string disp = char.ToUpperInvariant(ch).ToString();
-
-            // 空格也给个可见符号
-            if (ch == ' ') { PushToken("SPACE", "␣"); continue; }
-
             PushToken(disp, disp);
         }
     }
@@ -205,10 +230,26 @@ public sealed class AchievementSequenceRedeemWindow : MonoBehaviour
             var t = cellTexts[i];
             if (t == null) continue;
 
+            // 先恢复默认颜色
+            Color baseColor = (i < cellBaseColors.Count) ? cellBaseColors[i] : t.color;
+            t.color = baseColor;
+
             if (i < tokensDisplay.Count)
             {
                 t.text = tokensDisplay[i];
                 t.gameObject.SetActive(true);
+
+                // 只给“单字符字母”上色，避免 UP/DOWN 等 token 误伤
+                if (highlightLettersEnabled && i < tokensCanonical.Count)
+                {
+                    var canon = tokensCanonical[i]; // canon 已 NormalizeToken，通常是大写
+                    if (!string.IsNullOrEmpty(canon) && canon.Length == 1)
+                    {
+                        char c = canon[0];
+                        if (!string.IsNullOrEmpty(highlightLetters) && highlightLetters.IndexOf(c) >= 0)
+                            t.color = highlightColor;
+                    }
+                }
             }
             else
             {

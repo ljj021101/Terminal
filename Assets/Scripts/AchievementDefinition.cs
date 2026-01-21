@@ -11,6 +11,12 @@ public sealed class AchievementDefinition
     public Sprite icon;
     public string title;
 
+    [Header("Locked Presentation")]
+    public string lockedTitleOverride;
+
+    [Header("Special Behavior")]
+    public bool clickToUnlockWhenLocked;
+
     [TextArea]
     public string description;
 

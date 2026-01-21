@@ -3,7 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public sealed class AchievementCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
+public sealed class AchievementCard : MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler,
+    IPointerMoveHandler,
+    IPointerClickHandler
 {
     [Header("Runtime")]
     [SerializeField] private string achievementId;
@@ -70,7 +74,13 @@ public sealed class AchievementCard : MonoBehaviour, IPointerEnterHandler, IPoin
         }
 
         if (nameText != null)
-            nameText.text = unlocked ? title : lockedName;
+        {
+            string lockedTitle = lockedName;
+            if (def != null && !string.IsNullOrWhiteSpace(def.lockedTitleOverride))
+                lockedTitle = def.lockedTitleOverride;
+
+            nameText.text = unlocked ? title : lockedTitle;
+        }
 
         if (descText != null)
         {
@@ -129,6 +139,32 @@ public sealed class AchievementCard : MonoBehaviour, IPointerEnterHandler, IPoin
         var tip = AchievementHoverTooltip.Instance;
         if (tip != null)
             tip.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
+        var mgr = AchievementsManager.Instance;
+        if (mgr == null) return;
+
+        if (mgr.IsUnlocked(achievementId)) return;
+
+        AchievementDefinition def = null;
+        if (!mgr.TryGetDefinition(achievementId, out def) || def == null)
+            return;
+
+        if (!def.clickToUnlockWhenLocked)
+            return;
+
+        if (mgr.Unlock(achievementId))
+        {
+            Refresh();
+
+            if (AchievementHoverTooltip.Instance != null)
+                AchievementHoverTooltip.Instance.Hide();
+        }
     }
 
     private void TryShowOrUpdateTip(bool unlocked, AchievementDefinition def, Vector2? screenPosOverride = null)

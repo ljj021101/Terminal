@@ -691,6 +691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 262950483}
   - component: {fileID: 262950482}
+  - component: {fileID: 262950484}
   m_Layer: 0
   m_Name: AchievementListener
   m_TagString: Untagged
@@ -729,6 +730,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &262950484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262950481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed7ecc05fd5ae3d4f88b3e728aeb7e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SecondLaunchAchievement
+  achievementId: ach.second_launch
+  launchCountKey: meta.launch_count
 --- !u!1 &263448723
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,7 +1128,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 3
   m_Viewport: {fileID: 1421263221}
   m_HorizontalScrollbar: {fileID: 1555150938}
   m_VerticalScrollbar: {fileID: 932709093}
@@ -1894,7 +1909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2307,7 +2322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2416,6 +2431,9 @@ MonoBehaviour:
   resetButton: {fileID: 1090044542}
   backspaceButton: {fileID: 569858392}
   submitButton: {fileID: 1776600631}
+  highlightLettersEnabled: 1
+  highlightLetters: PIANO
+  highlightColor: {r: 0.3137255, g: 0, b: 0, a: 1}
 --- !u!114 &710488595 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6851604876559804746, guid: 9d702018ea14d76408dbd774a3a29463, type: 3}
@@ -3615,7 +3633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3755,7 +3773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3966,7 +3984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -5615,7 +5633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

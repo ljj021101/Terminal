@@ -35,3 +35,6 @@ MonoBehaviour:
   - achievementId: ach.readme
     sequences:
     - R E A D M E
+  - achievementId: ach.piano
+    sequences:
+    - P I A N O
